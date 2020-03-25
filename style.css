@@ -1,0 +1,21 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --sketchpad-height: 16;
+}
+
+#sketchpad {
+    display: grid;
+    width: 80vmin;
+    height: 80vmin;
+    margin: 0 auto;
+    grid-template-columns: repeat(var(--sketchpad-height), 1fr);
+    grid-template-rows: repeat(var(--sketchpad-height), 1fr);
+    border: 0.06rem solid rgb(114, 114, 114);
+}
+
+.sketchpad-cell {
+    border: 0.06rem solid rgb(240, 240, 240);
+}

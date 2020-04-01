@@ -1,4 +1,7 @@
 let toColorCell;
+let toDarkenOnRepeat;
+let currentColorMode;
+let currentHue;
 
 function defineNewHeight(height) {
     const element = document.querySelector(':root');
@@ -31,6 +34,16 @@ function generateRandomHSL() {
     return {hue, sat, light};
 }
 
+function generateRainbowHSL() {
+    currentHue = (currentHue == null || currentHue === 350) ? 0 : (currentHue + 10);
+
+    let hue, sat, light;
+    hue = currentHue;
+    sat = 70;
+    light = 50;
+    return {hue, sat, light};
+}
+
 function setCellHSL(cell, hue, sat, light) {
     cell.dataset.hue = `${hue}`;
     cell.dataset.sat = `${sat}`;
@@ -55,11 +68,21 @@ function darkenCell(cell) {
 
 function updateCellColor(cell) {
     if (toColorCell) {
-        if (cell.classList.contains('colored')) {
+        if (cell.classList.contains('colored') && toDarkenOnRepeat) {
             darkenCell(cell);
         } else {
-            let {hue, sat, light} = generateRandomHSL();
-            setCellHSL(cell, hue, sat, light);
+            let hsl;
+            switch (currentColorMode) {
+                case 'random':
+                    hsl = generateRandomHSL();
+                    break;
+                case 'rainbow':
+                    hsl = generateRainbowHSL();
+                    break;
+                default:
+                    // others
+            }
+            setCellHSL(cell, hsl.hue, hsl.sat, hsl.light);
         }
     }
 }
@@ -76,6 +99,8 @@ function enableInteraction() {
 }
 
 function load(height) {
+    currentColorMode = 'rainbow'; //add buttons to select color mode
+    toDarkenOnRepeat = true; //add toggle for this
     toColorCell = false;
     buildSketchpad(height);
     enableInteraction();

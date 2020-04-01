@@ -1,3 +1,5 @@
+let toColorCell;
+
 function defineNewHeight(height) {
     const element = document.querySelector(':root');
     element.style.setProperty('--sketchpad-height', `${height}`);
@@ -37,21 +39,46 @@ function setCellHSL(cell, hue, sat, light) {
     cell.classList.add('colored');
 }
 
-function updateCellColor(cell) {
-    let {hue, sat, light} = generateRandomHSL();
-    if (cell.classList.contains('colored')) {
-        // apply darkening
-    } else {
+function getCellHSL(cell) {
+    let hue, sat, light;
+    hue = Number(cell.dataset.hue);
+    sat = Number(cell.dataset.sat);
+    light = Number(cell.dataset.light);
+    return {hue, sat, light};
+}
+
+function darkenCell(cell) {
+    let {hue, sat, light} = getCellHSL(cell);
+    light = Math.round(0.85*light);
     setCellHSL(cell, hue, sat, light);
+}
+
+function updateCellColor(cell) {
+    if (toColorCell) {
+        if (cell.classList.contains('colored')) {
+            darkenCell(cell);
+        } else {
+            let {hue, sat, light} = generateRandomHSL();
+            setCellHSL(cell, hue, sat, light);
+        }
     }
 }
 
-function applyHoverFunc() {
+function enableInteraction() {
     let cells = document.querySelectorAll('.sketchpad-cell');
     cells.forEach((cell) => {
+        cell.addEventListener('click', () => {
+            toColorCell = !toColorCell;
+            updateCellColor(cell);
+        });
         cell.addEventListener('mouseover', () => updateCellColor(cell));
     })
 }
 
-buildSketchpad(16);
-applyHoverFunc();
+function load(height) {
+    toColorCell = false;
+    buildSketchpad(height);
+    enableInteraction();
+}
+
+load(16);

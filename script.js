@@ -1,5 +1,6 @@
 let toColorCell;
 let toDarkenOnRepeat;
+const defaultColorMode = 'random';
 let currentColorMode;
 let currentHue;
 
@@ -18,11 +19,41 @@ function addCell(type, className = '') {
 
 function buildSketchpad(height) {
     const sketchpadElement = document.querySelector('#sketchpad');
+    while (sketchpadElement.firstChild) {
+        sketchpadElement.removeChild(sketchpadElement.lastChild);
+    }
     let cell;
     defineNewHeight(height);
     for (let index = 0; index < height**2; index++) {
         cell = addCell('div','sketchpad-cell');
         sketchpadElement.appendChild(cell);
+    }
+}
+
+function resizeSketchpad() {
+    let height = prompt('How tall/wide should the sketchpad be? Please enter an integer between 16 and 100.\nWARNING: The current sketchpad will be cleared!');
+    if (Number.isInteger(Number(height)) && Number(height) >= 16 && Number(height) <= 100) {
+        buildSketchpad(height);
+        enableInteraction();
+        if (currentColorMode == 'eraser') {
+            currentColorMode = defaultColorMode;
+        }
+    } else if (height != null) {
+        alert('Please enter an integer between 16 and 100!');
+        resizeSketchpad();
+    }
+}
+
+function clearSketchpad() {
+    let confirmClear = confirm('Clear sketchpad?');
+    if (confirmClear) {
+        let cells = document.querySelectorAll('.sketchpad-cell');
+        cells.forEach((cell) => {
+            eraseCellColor(cell);
+        })
+        if (currentColorMode == 'eraser') {
+            currentColorMode = defaultColorMode;
+        }
     }
 }
 
@@ -44,6 +75,10 @@ function generateRainbowHSL() {
     return {hue, sat, light};
 }
 
+function generateCustomHSL() {
+
+}
+
 function setCellHSL(cell, hue, sat, light) {
     cell.dataset.hue = `${hue}`;
     cell.dataset.sat = `${sat}`;
@@ -60,6 +95,12 @@ function getCellHSL(cell) {
     return {hue, sat, light};
 }
 
+function eraseCellColor(cell) {
+    cell.removeData;
+    cell.style.backgroundColor = 'var(--sketchpad-color)';
+    cell.classList.remove('colored');
+}
+
 function darkenCell(cell) {
     let {hue, sat, light} = getCellHSL(cell);
     light = Math.round(0.85*light);
@@ -68,7 +109,9 @@ function darkenCell(cell) {
 
 function updateCellColor(cell) {
     if (toColorCell) {
-        if (cell.classList.contains('colored') && toDarkenOnRepeat) {
+        if (currentColorMode == 'eraser') {
+            eraseCellColor(cell);
+        } else if (cell.classList.contains('colored') && toDarkenOnRepeat) {
             darkenCell(cell);
         } else {
             let hsl;
@@ -79,8 +122,8 @@ function updateCellColor(cell) {
                 case 'rainbow':
                     hsl = generateRainbowHSL();
                     break;
-                default:
-                    // others
+                case 'custom':
+                    hsl = generateCustomHSL();
             }
             setCellHSL(cell, hsl.hue, hsl.sat, hsl.light);
         }
@@ -98,12 +141,42 @@ function enableInteraction() {
     })
 }
 
+function enableButtons() {
+    const customBtn = document.querySelector('#custom-button');
+    customBtn.addEventListener('click', () => {
+        currentColorMode = 'custom';
+    })
+    const randomBtn = document.querySelector('#random-button');
+    randomBtn.addEventListener('click', () => {
+        currentColorMode = 'random';
+    })
+    const rainbowBtn = document.querySelector('#rainbow-button');
+    rainbowBtn.addEventListener('click', () => {
+        currentHue = (currentColorMode != 'rainbow') ? 0 : currentHue;
+        currentColorMode = 'rainbow';
+    })
+    const eraserBtn = document.querySelector('#eraser-button');
+    eraserBtn.addEventListener('click', () => {
+        currentColorMode = 'eraser';
+    })
+    const darkenToggle = document.querySelector('#darken-toggle');
+    darkenToggle.addEventListener('click', () => {
+        toDarkenOnRepeat = !toDarkenOnRepeat;
+    })
+    const resizeBtn = document.querySelector('#resize-button');
+    resizeBtn.addEventListener('click', () => resizeSketchpad());
+    
+    const clearBtn = document.querySelector('#clear-button');
+    clearBtn.addEventListener('click', () => clearSketchpad());
+}
+
 function load(height) {
-    currentColorMode = 'rainbow'; //add buttons to select color mode
-    toDarkenOnRepeat = true; //add toggle for this
+    currentColorMode = defaultColorMode;
+    toDarkenOnRepeat = false;
     toColorCell = false;
     buildSketchpad(height);
     enableInteraction();
+    enableButtons();
 }
 
 load(16);

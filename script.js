@@ -1,8 +1,10 @@
+const defaultColorMode = 'random';
+const startingPickerColor = '#000000';
 let toColorCell;
 let toDarkenOnRepeat;
-const defaultColorMode = 'random';
 let currentColorMode;
 let currentHue;
+let customHEX;
 
 function defineNewHeight(height) {
     const element = document.querySelector(':root');
@@ -75,8 +77,66 @@ function generateRainbowHSL() {
     return {hue, sat, light};
 }
 
-function generateCustomHSL() {
+function refreshColorInput(event) {
+	customHEX = event.target.value;
+}
 
+function hexToHSL(hex) {
+	// hex to rgb
+	let r = 0, g = 0, b = 0;
+	if (hex.length == 4) {
+		r = `0x${hex[1]}${hex[1]}`;
+		g = `0x${hex[2]}${hex[2]}`;
+		b = `0x${hex[3]}${hex[3]}`;
+	} else if (hex.length == 7) {
+		r = `0x${hex[1]}${hex[2]}`;
+		g = `0x${hex[3]}${hex[4]}`;
+		b = `0x${hex[5]}${hex[6]}`;
+	}
+	// rgb to hsl
+	r /= 255;
+	g /= 255;
+	b /= 255;
+	
+	let cmin = Math.min(r, g, b),
+		cmax = Math.max(r, g, b),
+		delta = cmax - cmin,
+		hue,
+		sat,
+		light = (cmax + cmin)/2;
+	
+	if (delta == 0) {
+		hue = 0;
+		sat = 0;
+	} else {
+		sat = (light > 0.5) ? (delta/(2 - cmax - cmin)) : (delta/(cmax + cmin));
+		switch (cmax) {
+			case r:
+				hue = (g - b)/delta + ((g < b) ? 6 : 0);
+				break;
+			case g:
+				hue = (b - r)/delta + 2;
+				break;
+			case b:
+				hue = (r - g)/delta + 4;
+				break;
+		}
+		hue /= 6;
+	}
+	
+	hue *= 360;
+	hue = Math.round(hue);
+	sat *= 100;
+	sat = Math.round(sat);
+	light *= 100;
+	light = Math.round(light);
+	
+	return {hue, sat, light};
+}
+
+function generateCustomHSL() {
+	let {hue, sat, light} = hexToHSL(customHEX);
+	return {hue, sat, light};
 }
 
 function setCellHSL(cell, hue, sat, light) {
@@ -142,6 +202,10 @@ function enableInteraction() {
 }
 
 function enableButtons() {
+    const colorSelector = document.querySelector('#color-selector');
+	colorSelector.value = customHEX;
+    colorSelector.addEventListener("input", (e) => refreshColorInput(e));
+
     const customBtn = document.querySelector('#custom-button');
     customBtn.addEventListener('click', () => {
         currentColorMode = 'custom';
@@ -172,6 +236,7 @@ function enableButtons() {
 
 function load(height) {
     currentColorMode = defaultColorMode;
+	customHEX = startingPickerColor;
     toDarkenOnRepeat = false;
     toColorCell = false;
     buildSketchpad(height);

@@ -190,6 +190,13 @@ function updateCellColor(cell) {
     }
 }
 
+function setColorMode(modeStr) {
+    if (currentColorMode != modeStr) {
+        currentColorMode = modeStr;
+        // function to display current color mode visually
+    }
+}
+
 function enableInteraction() {
     let cells = document.querySelectorAll('.sketchpad-cell');
     cells.forEach((cell) => {
@@ -207,22 +214,19 @@ function enableButtons() {
     colorSelector.addEventListener("input", (e) => refreshColorInput(e));
 
     const customBtn = document.querySelector('#custom-button');
-    customBtn.addEventListener('click', () => {
-        currentColorMode = 'custom';
-    })
+    customBtn.addEventListener('click', () => setColorMode('custom'));
+
     const randomBtn = document.querySelector('#random-button');
-    randomBtn.addEventListener('click', () => {
-        currentColorMode = 'random';
-    })
+    randomBtn.addEventListener('click', () => setColorMode('random'));
+
     const rainbowBtn = document.querySelector('#rainbow-button');
     rainbowBtn.addEventListener('click', () => {
         currentHue = (currentColorMode != 'rainbow') ? 0 : currentHue;
-        currentColorMode = 'rainbow';
+        setColorMode('rainbow');
     })
     const eraserBtn = document.querySelector('#eraser-button');
-    eraserBtn.addEventListener('click', () => {
-        currentColorMode = 'eraser';
-    })
+    eraserBtn.addEventListener('click', () => setColorMode('eraser'));
+    
     const darkenToggle = document.querySelector('#darken-toggle');
     darkenToggle.addEventListener('click', () => {
         toDarkenOnRepeat = !toDarkenOnRepeat;

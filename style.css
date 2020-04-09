@@ -4,18 +4,59 @@
 
 :root {
     --sketchpad-height: 16;
+    --sketchpad-height-min-dim: 20rem;
+    --sketchpad-height-dim: 80vmin;
+    --sketchpad-outer-border: 0.12rem solid rgb(119, 119, 119);
+    --sketchpad-inner-border: 0.06rem solid rgb(240, 240, 240);
+    --sketchpad-hover: 0.1rem solid rgb(250, 150, 150);
+}
+
+body {
+    font-family: "Segoe UI", sans-serif;
+    font-size: 100%;
+}
+
+main {
+    display: grid;
+    grid-template-rows: auto 
+                        auto 
+                        minmax(calc(0.04*var(--sketchpad-height-min-dim)), calc(0.04*var(--sketchpad-height-dim))) 
+                        minmax(var(--sketchpad-height-min-dim), var(--sketchpad-height-dim)) 
+                        auto 
+                        auto;
+    justify-items: center;
+}
+
+.button {
+    margin: 0 1rem;
+}
+
+#current-color {
+    min-width: calc(0.8*var(--sketchpad-height-min-dim));
+    width: calc(0.8*var(--sketchpad-height-dim));
+    border: var(--sketchpad-outer-border);
+    border-bottom: 0;
 }
 
 #sketchpad {
     display: grid;
-    width: 80vmin;
-    height: 80vmin;
-    margin: 0 auto;
+    min-width: var(--sketchpad-height-min-dim);
+    width: var(--sketchpad-height-dim);
     grid-template-columns: repeat(var(--sketchpad-height), 1fr);
     grid-template-rows: repeat(var(--sketchpad-height), 1fr);
-    border: 0.06rem solid rgb(114, 114, 114);
+    border: var(--sketchpad-outer-border);
 }
 
 .sketchpad-cell {
-    border: 0.06rem solid rgb(240, 240, 240);
+    border: var(--sketchpad-inner-border);
+}
+
+.sketchpad-cell:hover {
+    border: var(--sketchpad-hover);
+    transform: scale(1.1);
+}
+
+#color-buttons {
+    display: flex;
+    align-items: center;
 }

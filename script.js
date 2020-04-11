@@ -1,4 +1,6 @@
-const defaultColorMode = 'random';
+const rootEle = document.querySelector(':root');
+const displayArea = document.querySelector('#current-color');
+const defaultColorMode = 'rainbow';
 const startingPickerColor = '#000000';
 let toColorCell;
 let toDarkenOnRepeat;
@@ -7,8 +9,7 @@ let currentHue;
 let customHEX;
 
 function defineNewHeight(height) {
-    const element = document.querySelector(':root');
-    element.style.setProperty('--sketchpad-height', `${height}`);
+    rootEle.style.setProperty('--sketchpad-height', `${height}`);
 }
 
 function addCell(type, className = '') {
@@ -78,7 +79,10 @@ function generateRainbowHSL() {
 }
 
 function refreshColorInput(event) {
-	customHEX = event.target.value;
+    customHEX = event.target.value;
+    if (currentColorMode === 'custom') {
+        displayColorMode('custom');
+    }
 }
 
 function hexToHSL(hex) {
@@ -193,7 +197,23 @@ function updateCellColor(cell) {
 function setColorMode(modeStr) {
     if (currentColorMode != modeStr) {
         currentColorMode = modeStr;
-        // function to display current color mode visually
+        displayColorMode(modeStr);
+    }
+}
+
+function displayColorMode(modeStr) {
+    switch (modeStr) {
+        case 'random':
+            displayArea.style.background = 'red'; //find a way to represent random
+            break;
+        case 'rainbow':
+            displayArea.style.background = 'linear-gradient(120deg, hsl(0, 70%, 50%), hsl(60, 70%, 50%), hsl(120, 70%, 50%), hsl(180, 70%, 50%), hsl(240, 70%, 50%), hsl(300, 70%, 50%), hsl(360, 70%, 50%))';
+            break;
+        case 'eraser':
+            displayArea.style.background = 'repeating-linear-gradient(120deg, white, white 5%, hsl(0, 80%, 50%) 5%, hsl(0, 80%, 50%) 6%)';
+            break;
+        case 'custom':
+            displayArea.style.background = customHEX;
     }
 }
 
@@ -202,10 +222,20 @@ function enableInteraction() {
     cells.forEach((cell) => {
         cell.addEventListener('click', () => {
             toColorCell = !toColorCell;
+            if (toColorCell) {
+                rootEle.style.setProperty('--sketchpad-hover-color', 'var(--sketchpad-hover-color-active)');
+            } else {
+                rootEle.style.setProperty('--sketchpad-hover-color', 'var(--sketchpad-hover-color-inactive)');
+            }
             updateCellColor(cell);
         });
         cell.addEventListener('mouseover', () => updateCellColor(cell));
     })
+}
+
+function toggleDarken() {
+    toDarkenOnRepeat = !toDarkenOnRepeat;
+    displayArea.classList.toggle('darken');
 }
 
 function enableButtons() {
@@ -228,9 +258,8 @@ function enableButtons() {
     eraserBtn.addEventListener('click', () => setColorMode('eraser'));
     
     const darkenToggle = document.querySelector('#darken-toggle');
-    darkenToggle.addEventListener('click', () => {
-        toDarkenOnRepeat = !toDarkenOnRepeat;
-    })
+    darkenToggle.addEventListener('click', () => toggleDarken());
+
     const resizeBtn = document.querySelector('#resize-button');
     resizeBtn.addEventListener('click', () => resizeSketchpad());
     
@@ -246,6 +275,7 @@ function load(height) {
     buildSketchpad(height);
     enableInteraction();
     enableButtons();
+    displayColorMode(currentColorMode);
 }
 
 load(16);

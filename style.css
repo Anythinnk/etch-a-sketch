@@ -8,7 +8,10 @@
     --sketchpad-height-dim: 80vmin;
     --sketchpad-outer-border: 0.12rem solid rgb(119, 119, 119);
     --sketchpad-inner-border: 0.06rem solid rgb(240, 240, 240);
-    --sketchpad-hover: 0.1rem solid rgb(250, 150, 150);
+    --sketchpad-hover-color-active: rgb(150, 250, 150);
+    --sketchpad-hover-color-inactive: rgb(150, 150, 150);
+    --sketchpad-hover-color: var(--sketchpad-hover-color-inactive);
+    --sketchpad-hover: 0.1rem solid var(--sketchpad-hover-color);
 }
 
 body {
@@ -36,6 +39,16 @@ main {
     width: calc(0.8*var(--sketchpad-height-dim));
     border: var(--sketchpad-outer-border);
     border-bottom: 0;
+}
+
+#current-color.darken::before {
+    content: "";
+    display: inline-block;
+    width: 50%;
+    height: 100%;
+    transform: translateX(50%) skew(-30deg);
+    background-color: black;
+    opacity: 0.4;
 }
 
 #sketchpad {

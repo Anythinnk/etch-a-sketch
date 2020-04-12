@@ -201,10 +201,20 @@ function setColorMode(modeStr) {
     }
 }
 
+function gradientStrRandomColors(numColors, angleStr = 'to right') {
+    let finalStr = `linear-gradient(${angleStr}`;
+    let percentageJump = 100/numColors;
+    for (let i = 0; i < numColors; i++) {
+        let {hue, sat, light} = generateRandomHSL();
+        finalStr += `, hsl(${hue}, ${sat}%, ${light}%) ${Math.round(percentageJump*i*10)/10}% ${Math.round(percentageJump*(i + 1)*10)/10}%`;
+    }
+    return finalStr;
+}
+
 function displayColorMode(modeStr) {
     switch (modeStr) {
         case 'random':
-            displayArea.style.background = 'red'; //find a way to represent random
+            displayArea.style.background = gradientStrRandomColors(15, '120deg');
             break;
         case 'rainbow':
             displayArea.style.background = 'linear-gradient(120deg, hsl(0, 70%, 50%), hsl(60, 70%, 50%), hsl(120, 70%, 50%), hsl(180, 70%, 50%), hsl(240, 70%, 50%), hsl(300, 70%, 50%), hsl(360, 70%, 50%))';

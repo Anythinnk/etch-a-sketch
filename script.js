@@ -60,6 +60,13 @@ function clearSketchpad() {
     }
 }
 
+function toggleGridSketchpad() {
+    let cells = document.querySelectorAll('.sketchpad-cell');
+    cells.forEach((cell) => {
+        cell.classList.toggle('no-border');
+    })
+}
+
 function generateRandomHSL() {
     let hue, sat, light;
     hue = Math.floor(Math.random()*360); // 0 to 359
@@ -273,6 +280,9 @@ function enableButtons() {
     const resizeBtn = document.querySelector('#resize-button');
     resizeBtn.addEventListener('click', () => resizeSketchpad());
     
+    const gridBtn = document.querySelector('#grid-button');
+    gridBtn.addEventListener('click', () => toggleGridSketchpad());
+
     const clearBtn = document.querySelector('#clear-button');
     clearBtn.addEventListener('click', () => clearSketchpad());
 }

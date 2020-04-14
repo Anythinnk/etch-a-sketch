@@ -6,6 +6,7 @@
     --sketchpad-height: 16;
     --sketchpad-height-min-dim: 20rem;
     --sketchpad-height-dim: 80vmin;
+    --sketchpad-background-color: rgb(255, 255, 255);
     --sketchpad-outer-border: 0.12rem solid rgb(119, 119, 119);
     --sketchpad-inner-border: 0.06rem solid rgb(240, 240, 240);
     --sketchpad-hover-color-active: rgb(150, 250, 150);
@@ -58,13 +59,18 @@ main {
     grid-template-columns: repeat(var(--sketchpad-height), 1fr);
     grid-template-rows: repeat(var(--sketchpad-height), 1fr);
     border: var(--sketchpad-outer-border);
+    background-color: var(--sketchpad-background-color);
 }
 
 .sketchpad-cell {
     border: var(--sketchpad-inner-border);
 }
 
-.sketchpad-cell:hover {
+.sketchpad-cell.no-border {
+    border: none;
+}
+
+.sketchpad-cell:hover, .sketchpad-cell.no-border:hover {
     border: var(--sketchpad-hover);
     transform: scale(1.1);
 }

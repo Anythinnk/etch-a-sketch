@@ -13,11 +13,20 @@
     --sketchpad-hover-color-inactive: rgb(150, 150, 150);
     --sketchpad-hover-color: var(--sketchpad-hover-color-inactive);
     --sketchpad-hover: 0.1rem solid var(--sketchpad-hover-color);
+    --button-background-color: rgb(232, 232, 232);
+    --button-background-color-active: rgb(210, 210, 210);
+    --button-background-color-hover: rgb(220, 220, 220);
+    --button-light-color-inactive: rgb(210, 210, 210);
+    --button-light-color-active: rgb(60, 216, 120);
+    --font-base-color: rgb(80, 80, 80);
+    --font-hover-color: rgb(10, 10, 10);
 }
 
 body {
     font-family: "Segoe UI", sans-serif;
     font-size: 100%;
+    color: var(--font-base-color);
+    background-color: rgb(245, 245, 245);
 }
 
 main {
@@ -32,7 +41,96 @@ main {
 }
 
 .button {
-    margin: 0 1rem;
+    margin: 0.5rem 2rem 0.5rem 0;
+    height: 2rem;
+    width: 7rem;
+    padding-left: 0.75rem;
+    position: relative;
+    background-color: var(--button-background-color);
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--font-base-color);
+    box-shadow: 0 0.08rem 0.15rem 0 rgb(110, 110, 110);
+}
+
+.button:not(:focus-visible) {
+    outline: none;
+}
+
+.button:hover {
+    background-color: var(--button-background-color-hover);
+    color: var(--font-hover-color);
+    transform: scale(1.05);
+}
+
+.button:active {
+    transform: translateY(0.05rem) scale(1.02);
+    box-shadow: 0 0.03rem 0.1rem 0;
+    background-color: var(--button-background-color-active);
+}
+
+.button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0.4rem;
+    height: 100%;
+    background-color: var(--button-light-color-inactive);
+}
+
+.button:active::before {
+    box-shadow: 0 -2rem 0 0 var(--button-light-color-active) inset;
+}
+
+.button:hover::before {
+    animation: button-light-up 0.5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes button-light-up {
+    100% {
+        box-shadow: 0 -2rem 0 0 var(--button-light-color-active) inset;
+    }
+}
+
+#display-title {
+    cursor: default;
+}
+
+#display-title > h1 {
+    font-size: 2.6rem;
+    margin: 1rem;
+    transition: all .7s;
+}
+
+#display-title > h1:hover {
+    transform: scale(1.1);
+    color: var(--font-hover-color);
+    transition: all .7s;
+}
+
+#display-title > h1::before, #display-title > h1::after {
+    content: "//";
+    padding: 0 1rem;
+    font-size: 2.2rem;
+    display: inline-block;
+    transform: translateY(-0.2rem);
+    transition: all .7s;
+}
+
+#display-title > h1:hover::before {
+    transform: scale(0.9091) translateY(-0.6rem);
+    color: var(--button-light-color-active);
+    transition: all .7s;
+}
+
+#display-title > h1:hover::after {
+    transform: scale(0.9091) translateY(0.2rem);
+    color: var(--button-light-color-active);
+    transition: all .7s;
 }
 
 #current-color {
@@ -78,4 +176,8 @@ main {
 #color-buttons {
     display: flex;
     align-items: center;
+}
+
+#eraser-button, #clear-button {
+    margin-right: 0;
 }

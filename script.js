@@ -39,8 +39,9 @@ function resizeSketchpad() {
     if (Number.isInteger(Number(height)) && Number(height) >= 16 && Number(height) <= 100) {
         buildSketchpad(height);
         enableInteraction();
+        currentHue = 0;
         if (currentColorMode == 'eraser') {
-            currentColorMode = defaultColorMode;
+            setColorMode(defaultColorMode);
         }
     } else if (height != null) {
         alert('Please enter an integer between 16 and 100!');
@@ -51,12 +52,13 @@ function resizeSketchpad() {
 function clearSketchpad() {
     let confirmClear = confirm('Clear sketchpad?');
     if (confirmClear) {
+        currentHue = 0;
         let cells = document.querySelectorAll('.sketchpad-cell');
         cells.forEach((cell) => {
             eraseCellColor(cell);
         })
         if (currentColorMode == 'eraser') {
-            currentColorMode = defaultColorMode;
+            setColorMode(defaultColorMode);
         }
     }
 }
@@ -78,7 +80,6 @@ function generateRandomHSL() {
 
 function generateRainbowHSL() {
     currentHue = (currentHue == null || currentHue === 350) ? 0 : (currentHue + 10);
-
     let hue, sat, light;
     hue = currentHue;
     sat = 70;
@@ -250,6 +251,9 @@ function enableInteraction() {
 }
 
 function enableButtons() {
+    const themeToggle = document.querySelector('#toggle-theme');
+    themeToggle.addEventListener('click', () => toggleDarkMode());
+
     const colorSelector = document.querySelector('#color-selector');
 	colorSelector.value = customHEX;
     colorSelector.addEventListener('input', (e) => refreshColorInput(e));
@@ -310,10 +314,22 @@ function displayColorMode(modeStr) {
             displayArea.style.background = 'linear-gradient(120deg, hsl(0, 70%, 50%), hsl(60, 70%, 50%), hsl(120, 70%, 50%), hsl(180, 70%, 50%), hsl(240, 70%, 50%), hsl(300, 70%, 50%), hsl(360, 70%, 50%))';
             break;
         case 'eraser':
-            displayArea.style.background = 'repeating-linear-gradient(120deg, white, white 5%, hsl(0, 80%, 50%) 5%, hsl(0, 80%, 50%) 6%)';
+            displayArea.style.background = 'repeating-linear-gradient(120deg, var(--sketchpad-background-color) 0% 5%, var(--eraser-display-stripe-color) 5% 6%)';
             break;
         case 'custom':
             displayArea.style.background = customHEX;
+    }
+}
+
+function toggleDarkMode() {
+    const themeLightText = document.querySelector('#theme-light-label');
+    const themeDarkText = document.querySelector('#theme-dark-label');
+    document.body.classList.toggle('dark-mode');
+    themeLightText.classList.toggle('bold-label');
+    themeDarkText.classList.toggle('bold-label');
+
+    if (currentColorMode === 'eraser') {
+        displayColorMode('eraser');
     }
 }
 

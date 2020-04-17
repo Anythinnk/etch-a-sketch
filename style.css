@@ -4,6 +4,7 @@
 
 :root {
     --page-color: rgb(248, 248, 248);
+    --pop-out-color: rgb(60, 216, 120);
 
     --sketchpad-height: 16;
     --sketchpad-height-min-dim: 20rem;
@@ -11,7 +12,7 @@
     --sketchpad-background-color: rgb(255, 255, 255);
     --sketchpad-outer-border: none;
     --sketchpad-inner-border-color: rgb(240, 240, 240);
-    --sketchpad-hover-color-active: rgb(150, 250, 150);
+    --sketchpad-hover-color-active: var(--pop-out-color);
     --sketchpad-hover-color-inactive: rgb(150, 150, 150);
     --sketchpad-hover-color: var(--sketchpad-hover-color-inactive);
     --sketchpad-box-shadow: 0 0.1rem 0.22rem 0 rgb(120, 120, 120);
@@ -20,12 +21,109 @@
     --button-background-color-active: rgb(220, 220, 220);
     --button-background-color-hover: rgb(226, 226, 226);
     --button-light-color-inactive: rgb(210, 210, 210);
-    --button-light-color-active: rgb(60, 216, 120);
+    --button-light-color-active: var(--pop-out-color);
     --button-box-shadow: 0 0.08rem 0.15rem 0 rgb(110, 110, 110);
     --button-box-shadow-click: 0 0.03rem 0.1rem 0;
-    
+
+    --eraser-display-stripe-color: hsl(0, 80%, 50%);
+
     --font-base-color: rgb(80, 80, 80);
     --font-hover-color: rgb(10, 10, 10);
+
+    --theme-label-color-bold: var(--font-base-color);
+    --theme-label-color: rgb(160, 160, 160);
+    --theme-bg-color: rgb(160, 160, 160);
+    --theme-circle-bg-color: rgb(240, 240, 240);
+}
+
+.dark-mode {
+    --page-color: rgb(35, 35, 35);
+
+    --sketchpad-background-color: rgb(25, 25, 25);
+    --sketchpad-inner-border-color: rgb(45, 45, 45);
+    
+    --button-background-color: rgb(50, 50, 50);
+    --button-background-color-active: rgb(68, 68, 68);
+    --button-background-color-hover: rgb(62, 62, 62);
+    --button-light-color-inactive: rgb(81, 81, 81);
+
+    --eraser-display-stripe-color: hsl(0, 80%, 30%);
+
+    --font-base-color: rgb(180, 180, 180);
+    --font-hover-color: rgb(245, 245, 245);
+
+    --theme-label-color-bold: var(--font-base-color);
+    --theme-label-color: rgb(100, 100, 100);
+    --theme-bg-color: var(--pop-out-color);
+    --theme-circle-bg-color: rgb(25, 25, 25);
+}
+
+header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+header > p {
+    font-size: 0.95rem;
+    margin: 0.3rem 0.4rem;
+    color: var(--theme-label-color);
+}
+
+.bold-label {
+    color: var(--theme-label-color-bold);
+    font-weight: bold;
+}
+
+.theme-switch { /* container of switch */
+    position: relative;
+    display: inline-block;
+    --switch-width: 3rem;
+    --switch-height: 1.6rem;
+    --switch-gap-top: 0.25rem;
+    --switch-gap-side: 0.3rem;
+    --switch-circle-diameter: calc(var(--switch-height) - 2 * var(--switch-gap-top));
+    --switch-transition-time: .3s;
+    width: var(--switch-width);
+    height: var(--switch-height);
+}
+
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-slider { /* background of the switch */
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--theme-bg-color);
+    transition: var(--switch-transition-time);
+    border-radius: calc(var(--switch-height)/2);
+}
+
+.switch-slider:before { /* switch circle */
+    position: absolute;
+    content: "";
+    height: var(--switch-circle-diameter);
+    width: var(--switch-circle-diameter);
+    left: var(--switch-gap-side);
+    bottom: var(--switch-gap-top);
+    background-color: var(--theme-circle-bg-color);
+    transition: var(--switch-transition-time);
+    border-radius: 50%;
+}
+
+.theme-switch input:checked + .switch-slider {
+    background-color: var(--theme-bg-color);
+}
+
+.theme-switch input:checked + .switch-slider:before {
+    transform: translateX(calc(var(--switch-width) - 2 * var(--switch-gap-side) - var(--switch-circle-diameter)));
 }
 
 body {
@@ -74,6 +172,7 @@ main {
 .button:active {
     transform: translateY(0.05rem) scale(1.02);
     box-shadow: var(--button-box-shadow-click);
+    color: var(--font-hover-color);
     background-color: var(--button-background-color-active);
 }
 
@@ -201,10 +300,12 @@ main {
 
 #darken-toggle:hover {
     transform: none;
+    color: var(--font-hover-color);
 }
 
 #darken-toggle:active {
     transform: translateY(0.05rem);
+    color: var(--font-hover-color);
     box-shadow: var(--button-box-shadow-click);
 }
 

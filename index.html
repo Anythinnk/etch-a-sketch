@@ -12,9 +12,9 @@
             <h1>Etch-a-Sketch</h1>
         </div>
         <div id="sketchpad-buttons">
-            <button class="button" id="resize-button">Resize</button>
-            <button class="button" id="grid-button">Toggle Grid</button>
-            <button class="button" id="clear-button">Clear</button>
+            <button class="button unpressed" id="resize-button">Resize</button>
+            <button class="button unpressed" id="grid-button">Toggle Grid</button>
+            <button class="button unpressed" id="clear-button">Clear</button>
         </div>
         <div id="current-color"></div>
         <div id="sketchpad"></div>
@@ -23,13 +23,11 @@
             <label for="darken-toggle">Darkening Effect</label>
         </div>
         <div id="color-buttons">
-            <div id="custom-choice">
-                <input type="color" id="color-selector" name="color-selector">
-                <button for="color-selector" class="button" id="custom-button">Custom</button>
-            </div>
-            <button class="button" id="random-button">Random</button>
-            <button class="button" id="rainbow-button">Rainbow</button>
-            <button class="button" id="eraser-button">Eraser</button>
+            <input type="color" id="color-selector" name="color-selector">
+            <button for="color-selector" class="color button unpressed" id="custom-button">Custom</button>
+            <button class="color button unpressed" id="random-button">Random</button>
+            <button class="color button unpressed" id="rainbow-button">Rainbow</button>
+            <button class="color button unpressed" id="eraser-button">Eraser</button>
         </div>
     </main>
     <script type="text/javascript" src="script.js"></script>

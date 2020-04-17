@@ -41,9 +41,9 @@ main {
 }
 
 .button {
-    margin: 0.5rem 2rem 0.5rem 0;
+    margin: 0.5rem 3vw 0.5rem 0;
     height: 2rem;
-    width: 7rem;
+    width: 6.5rem;
     padding-left: 0.75rem;
     position: relative;
     background-color: var(--button-background-color);
@@ -78,22 +78,21 @@ main {
     left: 0;
     width: 0.4rem;
     height: 100%;
-    background-color: var(--button-light-color-inactive);
+    background-size: 100% 200%;
+    background-image: linear-gradient(0deg, var(--button-light-color-inactive) 50%, var(--button-light-color-active) 50%);
+    transition: background-position 0.5s;
 }
 
-.button:active::before {
-    box-shadow: 0 -2rem 0 0 var(--button-light-color-active) inset;
+.button.unpressed::before {
+    background-position: 0 -100%;
 }
 
-.button:hover::before {
-    animation: button-light-up 0.5s;
-    animation-fill-mode: forwards;
+.button.unpressed:active::before {
+    background-position: 0 0;
 }
 
-@keyframes button-light-up {
-    100% {
-        box-shadow: 0 -2rem 0 0 var(--button-light-color-active) inset;
-    }
+.button.unpressed:hover::before {
+    background-position: 0 0;
 }
 
 #display-title {
@@ -140,13 +139,18 @@ main {
     border-bottom: 0;
 }
 
-#current-color.darken::before {
+#current-color::before {
     content: "";
     display: inline-block;
     width: 50%;
     height: 100%;
     transform: translateX(100%);
     background-color: black;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+#current-color.darken::before {
     opacity: 0.5;
 }
 
@@ -171,6 +175,36 @@ main {
 .sketchpad-cell:hover, .sketchpad-cell.no-border:hover {
     border: var(--sketchpad-hover);
     transform: scale(1.1);
+}
+
+#color-selector {
+    margin: 0 1vw 0 0;
+    height: 2rem;
+    width: 2rem;
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+    background-color: var(--button-background-color);
+    box-shadow: 0 0.08rem 0.15rem 0 rgb(110, 110, 110);
+}
+
+#color-selector::-webkit-color-swatch {
+    border: none;
+}
+
+#color-selector:not(:focus-visible) {
+    outline: none;
+}
+
+#color-selector:active {
+    transform: translateY(0.05rem) scale(1.02);
+    box-shadow: 0 0.03rem 0.1rem 0;
+    background-color: var(--button-background-color-active);
+}
+
+#color-selector:hover {
+    background-color: var(--button-background-color-hover);
+    transform: scale(1.05);
 }
 
 #color-buttons {

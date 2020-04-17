@@ -2,6 +2,7 @@ const rootEle = document.querySelector(':root');
 const displayArea = document.querySelector('#current-color');
 const defaultColorMode = 'rainbow';
 const startingPickerColor = '#000000';
+let gridlinesOn;
 let toColorCell;
 let toDarkenOnRepeat;
 let currentColorMode;
@@ -203,9 +204,18 @@ function updateCellColor(cell) {
 
 function setColorMode(modeStr) {
     if (currentColorMode != modeStr) {
+        let prevColorMode = currentColorMode;
         currentColorMode = modeStr;
-        displayColorMode(modeStr);
+        displayColorMode(currentColorMode);
+        updateColorBtns(prevColorMode, currentColorMode);
     }
+}
+
+function updateColorBtns(...args) {
+    args.forEach((str) => {
+        let btn = document.querySelector(`#${str}-button`);
+        btn.classList.toggle('unpressed');
+    });
 }
 
 function gradientStrRandomColors(numColors, angleStr = 'to right') {
@@ -218,20 +228,9 @@ function gradientStrRandomColors(numColors, angleStr = 'to right') {
     return finalStr;
 }
 
-function displayColorMode(modeStr) {
-    switch (modeStr) {
-        case 'random':
-            displayArea.style.background = gradientStrRandomColors(15, '120deg');
-            break;
-        case 'rainbow':
-            displayArea.style.background = 'linear-gradient(120deg, hsl(0, 70%, 50%), hsl(60, 70%, 50%), hsl(120, 70%, 50%), hsl(180, 70%, 50%), hsl(240, 70%, 50%), hsl(300, 70%, 50%), hsl(360, 70%, 50%))';
-            break;
-        case 'eraser':
-            displayArea.style.background = 'repeating-linear-gradient(120deg, white, white 5%, hsl(0, 80%, 50%) 5%, hsl(0, 80%, 50%) 6%)';
-            break;
-        case 'custom':
-            displayArea.style.background = customHEX;
-    }
+function toggleDarken() {
+    toDarkenOnRepeat = !toDarkenOnRepeat;
+    displayArea.classList.toggle('darken');
 }
 
 function enableInteraction() {
@@ -250,15 +249,10 @@ function enableInteraction() {
     })
 }
 
-function toggleDarken() {
-    toDarkenOnRepeat = !toDarkenOnRepeat;
-    displayArea.classList.toggle('darken');
-}
-
 function enableButtons() {
     const colorSelector = document.querySelector('#color-selector');
 	colorSelector.value = customHEX;
-    colorSelector.addEventListener("input", (e) => refreshColorInput(e));
+    colorSelector.addEventListener('input', (e) => refreshColorInput(e));
 
     const customBtn = document.querySelector('#custom-button');
     customBtn.addEventListener('click', () => setColorMode('custom'));
@@ -281,10 +275,43 @@ function enableButtons() {
     resizeBtn.addEventListener('click', () => resizeSketchpad());
     
     const gridBtn = document.querySelector('#grid-button');
-    gridBtn.addEventListener('click', () => toggleGridSketchpad());
+    gridBtn.addEventListener('click', () => {
+        toggleGridSketchpad();
+        gridBtn.classList.toggle('unpressed');
+    });
 
     const clearBtn = document.querySelector('#clear-button');
     clearBtn.addEventListener('click', () => clearSketchpad());
+}
+
+function initializeButtonStates() {
+    const gridBtn = document.querySelector('#grid-button');
+    if (gridlinesOn) {
+        gridBtn.classList.toggle('unpressed');
+    }
+
+    let colorBtns = document.querySelectorAll('.color');
+    colorBtns.forEach((btn) => {
+        if (btn.id == `${currentColorMode}-button`) {
+            btn.classList.toggle('unpressed');
+        }
+    })
+}
+
+function displayColorMode(modeStr) {
+    switch (modeStr) {
+        case 'random':
+            displayArea.style.background = gradientStrRandomColors(15, '120deg');
+            break;
+        case 'rainbow':
+            displayArea.style.background = 'linear-gradient(120deg, hsl(0, 70%, 50%), hsl(60, 70%, 50%), hsl(120, 70%, 50%), hsl(180, 70%, 50%), hsl(240, 70%, 50%), hsl(300, 70%, 50%), hsl(360, 70%, 50%))';
+            break;
+        case 'eraser':
+            displayArea.style.background = 'repeating-linear-gradient(120deg, white, white 5%, hsl(0, 80%, 50%) 5%, hsl(0, 80%, 50%) 6%)';
+            break;
+        case 'custom':
+            displayArea.style.background = customHEX;
+    }
 }
 
 function load(height) {
@@ -292,9 +319,11 @@ function load(height) {
 	customHEX = startingPickerColor;
     toDarkenOnRepeat = false;
     toColorCell = false;
+    gridlinesOn = true;
     buildSketchpad(height);
     enableInteraction();
     enableButtons();
+    initializeButtonStates();
     displayColorMode(currentColorMode);
 }
 

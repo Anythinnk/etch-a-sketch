@@ -50,7 +50,7 @@
     --eraser-display-stripe-color: hsl(0, 80%, 30%);
 
     --font-base-color: rgb(180, 180, 180);
-    --font-hover-color: rgb(245, 245, 245);
+    --font-hover-color: rgb(240, 240, 240);
 
     --theme-label-color-bold: var(--font-base-color);
     --theme-label-color: rgb(100, 100, 100);
@@ -106,6 +106,10 @@ header > p {
     border-radius: calc(var(--switch-height)/2);
 }
 
+.switch-slider:hover {
+    background-color: var(--pop-out-color);
+}
+
 .switch-slider:before { /* switch circle */
     position: absolute;
     content: "";
@@ -124,6 +128,10 @@ header > p {
 
 .theme-switch input:checked + .switch-slider:before {
     transform: translateX(calc(var(--switch-width) - 2 * var(--switch-gap-side) - var(--switch-circle-diameter)));
+}
+
+.theme-switch input:checked + .switch-slider:hover:before {
+    background-color: var(--font-hover-color);
 }
 
 body {

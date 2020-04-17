@@ -3,21 +3,27 @@
 }
 
 :root {
+    --page-color: rgb(248, 248, 248);
+
     --sketchpad-height: 16;
     --sketchpad-height-min-dim: 20rem;
     --sketchpad-height-dim: 80vmin;
     --sketchpad-background-color: rgb(255, 255, 255);
-    --sketchpad-outer-border: 0.12rem solid rgb(119, 119, 119);
-    --sketchpad-inner-border: 0.06rem solid rgb(240, 240, 240);
+    --sketchpad-outer-border: none;
+    --sketchpad-inner-border-color: rgb(240, 240, 240);
     --sketchpad-hover-color-active: rgb(150, 250, 150);
     --sketchpad-hover-color-inactive: rgb(150, 150, 150);
     --sketchpad-hover-color: var(--sketchpad-hover-color-inactive);
-    --sketchpad-hover: 0.1rem solid var(--sketchpad-hover-color);
-    --button-background-color: rgb(232, 232, 232);
-    --button-background-color-active: rgb(210, 210, 210);
-    --button-background-color-hover: rgb(220, 220, 220);
+    --sketchpad-box-shadow: 0 0.1rem 0.22rem 0 rgb(120, 120, 120);
+
+    --button-background-color: rgb(238, 238, 238);
+    --button-background-color-active: rgb(220, 220, 220);
+    --button-background-color-hover: rgb(226, 226, 226);
     --button-light-color-inactive: rgb(210, 210, 210);
     --button-light-color-active: rgb(60, 216, 120);
+    --button-box-shadow: 0 0.08rem 0.15rem 0 rgb(110, 110, 110);
+    --button-box-shadow-click: 0 0.03rem 0.1rem 0;
+    
     --font-base-color: rgb(80, 80, 80);
     --font-hover-color: rgb(10, 10, 10);
 }
@@ -26,7 +32,7 @@ body {
     font-family: "Segoe UI", sans-serif;
     font-size: 100%;
     color: var(--font-base-color);
-    background-color: rgb(245, 245, 245);
+    background-color: var(--page-color);
 }
 
 main {
@@ -35,7 +41,7 @@ main {
                         auto 
                         minmax(calc(0.04*var(--sketchpad-height-min-dim)), calc(0.04*var(--sketchpad-height-dim))) 
                         minmax(var(--sketchpad-height-min-dim), var(--sketchpad-height-dim)) 
-                        auto 
+                        minmax(calc(0.04*var(--sketchpad-height-min-dim)), calc(0.04*var(--sketchpad-height-dim))) 
                         auto;
     justify-items: center;
 }
@@ -52,7 +58,7 @@ main {
     cursor: pointer;
     font-size: 0.9rem;
     color: var(--font-base-color);
-    box-shadow: 0 0.08rem 0.15rem 0 rgb(110, 110, 110);
+    box-shadow: var(--button-box-shadow);
 }
 
 .button:not(:focus-visible) {
@@ -67,7 +73,7 @@ main {
 
 .button:active {
     transform: translateY(0.05rem) scale(1.02);
-    box-shadow: 0 0.03rem 0.1rem 0;
+    box-shadow: var(--button-box-shadow-click);
     background-color: var(--button-background-color-active);
 }
 
@@ -87,11 +93,7 @@ main {
     background-position: 0 -100%;
 }
 
-.button.unpressed:active::before {
-    background-position: 0 0;
-}
-
-.button.unpressed:hover::before {
+.button.unpressed:active::before, .button.unpressed:hover::before {
     background-position: 0 0;
 }
 
@@ -132,11 +134,16 @@ main {
     transition: all .7s;
 }
 
+#sketchpad-buttons {
+    margin-bottom: 0.2rem;
+}
+
 #current-color {
     min-width: calc(0.8*var(--sketchpad-height-min-dim));
     width: calc(0.8*var(--sketchpad-height-dim));
     border: var(--sketchpad-outer-border);
     border-bottom: 0;
+    box-shadow: var(--sketchpad-box-shadow);
 }
 
 #current-color::before {
@@ -162,10 +169,11 @@ main {
     grid-template-rows: repeat(var(--sketchpad-height), 1fr);
     border: var(--sketchpad-outer-border);
     background-color: var(--sketchpad-background-color);
+    box-shadow: var(--sketchpad-box-shadow);
 }
 
 .sketchpad-cell {
-    border: var(--sketchpad-inner-border);
+    border: 0.06rem solid var(--sketchpad-inner-border-color);
 }
 
 .sketchpad-cell.no-border {
@@ -173,8 +181,51 @@ main {
 }
 
 .sketchpad-cell:hover, .sketchpad-cell.no-border:hover {
-    border: var(--sketchpad-hover);
+    border: 0.1rem solid var(--sketchpad-hover-color);
     transform: scale(1.1);
+}
+
+#darken-toggle {
+    margin: 0;
+    height: 100%;
+    min-width: calc(0.5*var(--sketchpad-height-min-dim));
+    width: calc(0.5*var(--sketchpad-height-dim));
+    border: var(--sketchpad-outer-border);
+    border-top: 0;
+    color: var(--font-base-color);
+    cursor: pointer;
+    padding: 0;
+    font-size: 0.75rem;
+    box-shadow: var(--sketchpad-box-shadow);
+}
+
+#darken-toggle:hover {
+    transform: none;
+}
+
+#darken-toggle:active {
+    transform: translateY(0.05rem);
+    box-shadow: var(--button-box-shadow-click);
+}
+
+#darken-toggle::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0.4rem;
+    height: 100%;
+    background-size: 100% 200%;
+    background-image: linear-gradient(0deg, var(--button-light-color-inactive) 50%, var(--button-light-color-active) 50%);
+    transition: background-position 0.5s;
+}
+
+#darken-toggle.unpressed::after {
+    background-position: 0 -100%;
+}
+
+#darken-toggle.unpressed:active::after, #darken-toggle.unpressed:hover::after {
+    background-position: 0 0;
 }
 
 #color-selector {
@@ -185,7 +236,7 @@ main {
     border-radius: 0;
     cursor: pointer;
     background-color: var(--button-background-color);
-    box-shadow: 0 0.08rem 0.15rem 0 rgb(110, 110, 110);
+    box-shadow: var(--button-box-shadow);
 }
 
 #color-selector::-webkit-color-swatch {
@@ -198,7 +249,7 @@ main {
 
 #color-selector:active {
     transform: translateY(0.05rem) scale(1.02);
-    box-shadow: 0 0.03rem 0.1rem 0;
+    box-shadow: var(--button-box-shadow-click);
     background-color: var(--button-background-color-active);
 }
 
@@ -210,6 +261,7 @@ main {
 #color-buttons {
     display: flex;
     align-items: center;
+    margin-top: 0.3rem;
 }
 
 #eraser-button, #clear-button {

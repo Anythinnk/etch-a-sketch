@@ -269,7 +269,10 @@ function enableButtons() {
     eraserBtn.addEventListener('click', () => setColorMode('eraser'));
     
     const darkenToggle = document.querySelector('#darken-toggle');
-    darkenToggle.addEventListener('click', () => toggleDarken());
+    darkenToggle.addEventListener('click', () => {
+        toggleDarken();
+        darkenToggle.classList.toggle('unpressed');
+    });
 
     const resizeBtn = document.querySelector('#resize-button');
     resizeBtn.addEventListener('click', () => resizeSketchpad());

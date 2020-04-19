@@ -7,7 +7,7 @@
     --pop-out-color: rgb(60, 216, 120);
 
     --sketchpad-height: 16;
-    --sketchpad-height-min-dim: 20rem;
+    --sketchpad-height-min-dim: 420px;
     --sketchpad-height-dim: 80vmin;
     --sketchpad-background-color: rgb(255, 255, 255);
     --sketchpad-outer-border: none;
@@ -143,6 +143,12 @@ body {
 
 main {
     display: grid;
+    grid-template-areas:    "title"
+                            "sketchpad-buttons"
+                            "color-display"
+                            "sketchpad"
+                            "shade-toggle"
+                            "color-buttons";
     grid-template-rows: auto 
                         auto 
                         minmax(calc(0.04*var(--sketchpad-height-min-dim)), calc(0.04*var(--sketchpad-height-dim))) 
@@ -206,6 +212,7 @@ main {
 
 #display-title {
     cursor: default;
+    grid-area: title;
 }
 
 #display-title > h1 {
@@ -243,9 +250,11 @@ main {
 
 #sketchpad-buttons {
     margin-bottom: 0.2rem;
+    grid-area: sketchpad-buttons;
 }
 
 #current-color {
+    grid-area: color-display;
     min-width: calc(0.8*var(--sketchpad-height-min-dim));
     width: calc(0.8*var(--sketchpad-height-dim));
     border: var(--sketchpad-outer-border);
@@ -269,6 +278,7 @@ main {
 }
 
 #sketchpad {
+    grid-area: sketchpad;
     display: grid;
     min-width: var(--sketchpad-height-min-dim);
     width: var(--sketchpad-height-dim);
@@ -293,6 +303,7 @@ main {
 }
 
 #darken-toggle {
+    grid-area: shade-toggle;
     margin: 0;
     height: 100%;
     min-width: calc(0.5*var(--sketchpad-height-min-dim));
@@ -335,7 +346,7 @@ main {
     transform: translateY(0.05rem);
     color: var(--font-hover-color);
     box-shadow: var(--button-box-shadow-click);
-}
+}h
 
 #darken-toggle::after {
     content: "";
@@ -355,6 +366,13 @@ main {
 
 #darken-toggle.unpressed:active::after, #darken-toggle.unpressed:hover::after {
     background-position: 0 0;
+}
+
+#color-buttons {
+    grid-area: color-buttons;
+    display: flex;
+    align-items: center;
+    margin-top: 0.3rem;
 }
 
 #color-selector {
@@ -387,12 +405,52 @@ main {
     transform: scale(1.05);
 }
 
-#color-buttons {
-    display: flex;
-    align-items: center;
-    margin-top: 0.3rem;
-}
-
 #eraser-button, #clear-button {
     margin-right: 0;
+}
+
+@media (min-aspect-ratio: 6/5) {
+    :root {
+        --sketchpad-height-dim: 70vmin;
+    }
+
+    main {
+        grid-template-areas:    "title              title           title"
+                                "sketchpad-buttons  color-display   color-buttons"
+                                "sketchpad-buttons  sketchpad       color-buttons"
+                                "sketchpad-buttons  shade-toggle    color-buttons";
+        grid-template-rows: auto
+                            minmax(calc(0.04*var(--sketchpad-height-min-dim)), calc(0.04*var(--sketchpad-height-dim))) 
+                            minmax(var(--sketchpad-height-min-dim), var(--sketchpad-height-dim)) 
+                            minmax(calc(0.04*var(--sketchpad-height-min-dim)), calc(0.04*var(--sketchpad-height-dim)));
+        grid-template-columns: 1fr auto 1fr;
+        justify-items: center;
+    }
+
+    .button {
+        margin: 5vh 0 0;
+    }
+
+    #sketchpad-buttons {
+        align-self: center;
+        justify-self: right;
+        display: flex;
+        flex-direction: column;
+        margin-right: 1.5rem;
+    }
+
+    #color-buttons {
+        align-self: center;
+        justify-self: left;
+        flex-direction: column;
+        margin: 0 0 0 1.5rem;
+    }
+
+    #color-selector {
+        margin: 0;
+    }
+
+    #custom-button {
+        margin-top: 1vh;
+    }
 }

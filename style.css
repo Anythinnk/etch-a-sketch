@@ -7,7 +7,7 @@
     --pop-out-color: rgb(60, 216, 120);
 
     --sketchpad-height: 16;
-    --sketchpad-height-min-dim: 26.25rem;
+    --sketchpad-height-min-dim: 256px;
     --sketchpad-height-dim: 80vmin;
     --sketchpad-background-color: rgb(255, 255, 255);
     --sketchpad-outer-border: none;
@@ -409,7 +409,7 @@ main {
     margin-right: 0;
 }
 
-@media (min-aspect-ratio: 6/5) {
+@media only screen and (min-aspect-ratio: 6/5) {
     :root {
         --sketchpad-height-dim: 70vmin;
     }

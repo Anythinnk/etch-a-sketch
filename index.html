@@ -26,7 +26,11 @@
         </div>
         <div id="current-color"></div>
         <div id="sketchpad"></div>
-        <button class="unpressed button" id="darken-toggle">Toggle Shading</button>
+        <button class="unpressed button" id="darken-toggle">
+            <span class="default">Toggle Shading</span>
+            <span class="currently-active">Turn Shading Off</span>
+            <span class="currently-passive">Turn Shading On</span>
+        </button>
         <div id="color-buttons">
             <input type="color" id="color-selector" name="color-selector">
             <button for="color-selector" class="color button unpressed" id="custom-button">Custom</button>

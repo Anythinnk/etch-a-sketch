@@ -306,9 +306,29 @@ main {
     box-shadow: var(--sketchpad-box-shadow);
 }
 
+#darken-toggle .currently-active {
+    display: none;
+}
+
+#darken-toggle .currently-passive {
+    display: none;
+}
+
 #darken-toggle:hover {
     transform: none;
     color: var(--font-hover-color);
+}
+
+#darken-toggle:hover .default {
+    display: none;
+}
+
+#darken-toggle.unpressed:hover .currently-passive {
+    display: inline;
+}
+
+#darken-toggle:not(.unpressed):hover .currently-active {
+    display: inline;
 }
 
 #darken-toggle:active {

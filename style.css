@@ -7,7 +7,7 @@
     --pop-out-color: rgb(60, 216, 120);
 
     --sketchpad-height: 16;
-    --sketchpad-height-min-dim: 256px;
+    --sketchpad-height-min-dim: 420px;
     --sketchpad-height-dim: 80vmin;
     --sketchpad-background-color: rgb(255, 255, 255);
     --sketchpad-outer-border: none;
@@ -251,6 +251,7 @@ main {
 #sketchpad-buttons {
     margin-bottom: 0.2rem;
     grid-area: sketchpad-buttons;
+    display: flex;
 }
 
 #current-color {
@@ -313,7 +314,7 @@ main {
     color: var(--font-base-color);
     cursor: pointer;
     padding: 0;
-    font-size: 0.75rem;
+    font-size: min(0.9rem, max(0.75rem, calc(0.025*var(--sketchpad-height-dim))));
     box-shadow: var(--sketchpad-box-shadow);
 }
 
@@ -434,7 +435,6 @@ main {
     #sketchpad-buttons {
         align-self: center;
         justify-self: right;
-        display: flex;
         flex-direction: column;
         margin-right: 1.5rem;
     }

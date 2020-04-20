@@ -347,7 +347,7 @@ main {
     transform: translateY(0.05rem);
     color: var(--font-hover-color);
     box-shadow: var(--button-box-shadow-click);
-}h
+}
 
 #darken-toggle::after {
     content: "";

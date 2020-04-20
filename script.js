@@ -333,6 +333,23 @@ function toggleDarkMode() {
     }
 }
 
+function cycleTips() {
+    const tips = [
+        'Click on the sketchpad to enable/disable drawing', 
+        'The bar above the sketchpad displays your current drawing mode/color',
+        'Half of the bar above the sketchpad will be darkened if shading is enabled',
+        'If shading is enabled, cells that you hover over repeatedly will darken slowly until black',
+        'If shading is disabled, cell colors will be replaced on repeated hovers',
+        'Double click a cell when drawing is disabled to color that cell only'];
+    const element = document.querySelector('#tip');
+    let index = 0;
+    let cycle = setInterval(chooseTip, 8000);
+    function chooseTip() {
+        index = (index == tips.length - 1) ? 0 : index + 1;
+        element.textContent = tips[index];
+    }
+}
+
 function load(height) {
     currentColorMode = defaultColorMode;
 	customHEX = startingPickerColor;
@@ -344,6 +361,7 @@ function load(height) {
     enableButtons();
     initializeButtonStates();
     displayColorMode(currentColorMode);
+    cycleTips();
 }
 
 load(16);

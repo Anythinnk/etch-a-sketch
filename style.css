@@ -148,7 +148,8 @@ main {
                             "color-display"
                             "sketchpad"
                             "shade-toggle"
-                            "color-buttons";
+                            "color-buttons"
+                            "tips";
     grid-template-rows: auto 
                         auto 
                         minmax(calc(0.04*var(--sketchpad-height-min-dim)), calc(0.04*var(--sketchpad-height-dim))) 
@@ -410,6 +411,36 @@ main {
     margin-right: 0;
 }
 
+#usage-tips {
+    grid-area: tips;
+}
+
+#usage-tips > p {
+    color: var(--theme-label-color);
+    text-align: center;
+    margin: 0.5rem 0 0;
+    font-size: 0.85rem;
+    animation: fade-in-out 8s ease-in-out 0s infinite;
+}
+
+@keyframes fade-in-out {
+    0% {
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    85% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
 @media only screen and (min-aspect-ratio: 6/5) {
     :root {
         --sketchpad-height-dim: 70vmin;
@@ -419,7 +450,8 @@ main {
         grid-template-areas:    "title              title           title"
                                 "sketchpad-buttons  color-display   color-buttons"
                                 "sketchpad-buttons  sketchpad       color-buttons"
-                                "sketchpad-buttons  shade-toggle    color-buttons";
+                                "sketchpad-buttons  shade-toggle    color-buttons"
+                                "tips               tips            tips";
         grid-template-rows: auto
                             minmax(calc(0.04*var(--sketchpad-height-min-dim)), calc(0.04*var(--sketchpad-height-dim))) 
                             minmax(var(--sketchpad-height-min-dim), var(--sketchpad-height-dim)) 
@@ -452,5 +484,9 @@ main {
 
     #custom-button {
         margin-top: 1vh;
+    }
+
+    #usage-tips > p {
+        margin: 2vh 0 0;
     }
 }

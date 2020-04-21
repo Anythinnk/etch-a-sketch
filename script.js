@@ -34,32 +34,23 @@ function buildSketchpad(height) {
     }
 }
 
-function resizeSketchpad() {
-    let height = prompt('How tall/wide should the sketchpad be? Please enter an integer between 16 and 100.\nWARNING: The current sketchpad will be cleared!');
-    if (Number.isInteger(Number(height)) && Number(height) >= 16 && Number(height) <= 100) {
-        buildSketchpad(height);
-        enableInteraction();
-        currentHue = 0;
-        if (currentColorMode == 'eraser') {
-            setColorMode(defaultColorMode);
-        }
-    } else if (height != null) {
-        alert('Please enter an integer between 16 and 100!');
-        resizeSketchpad();
+function resizeSketchpad(height) {
+    buildSketchpad(height);
+    enableInteraction();
+    currentHue = 0;
+    if (currentColorMode == 'eraser') {
+        setColorMode(defaultColorMode);
     }
 }
 
 function clearSketchpad() {
-    let confirmClear = confirm('Clear sketchpad?');
-    if (confirmClear) {
-        currentHue = 0;
-        let cells = document.querySelectorAll('.sketchpad-cell');
-        cells.forEach((cell) => {
-            eraseCellColor(cell);
-        })
-        if (currentColorMode == 'eraser') {
-            setColorMode(defaultColorMode);
-        }
+    currentHue = 0;
+    let cells = document.querySelectorAll('.sketchpad-cell');
+    cells.forEach((cell) => {
+        eraseCellColor(cell);
+    })
+    if (currentColorMode == 'eraser') {
+        setColorMode(defaultColorMode);
     }
 }
 
@@ -278,17 +269,52 @@ function enableButtons() {
         darkenToggle.classList.toggle('unpressed');
     });
 
+    const resizeDialog = document.querySelector('#confirm-resize');
     const resizeBtn = document.querySelector('#resize-button');
-    resizeBtn.addEventListener('click', () => resizeSketchpad());
-    
+    const resizeInput = document.querySelector('#resize-input');
+    const resizeOkBtn = document.querySelector('#resize-ok-btn');
+    const resizeCancelBtn = document.querySelector('#resize-cancel-btn');
+    const resizeWrongInputAlert = document.querySelector('#resize-wrong-input');
+    const requirementEmphasis = document.querySelector('#req-emphasis');
+    resizeBtn.addEventListener('click', () => resizeDialog.showModal());
+    resizeOkBtn.addEventListener('click', () => {
+        let height = resizeInput.value;
+        if (Number.isInteger(Number(height)) && Number(height) >= 16 && Number(height) <= 100) {
+            resizeSketchpad(height);
+            resizeInput.value = '';
+            requirementEmphasis.style.fontWeight = 'normal';
+            resizeDialog.close();
+        } else if (height != null) {
+            resizeInput.value = '';
+            requirementEmphasis.style.fontWeight = 'bold';
+            resizeWrongInputAlert.showModal();
+        }
+    })
+    resizeInput.addEventListener('keyup', (e) => {
+        if (e.keyCode === 13) {
+            e.preventDefault();
+            resizeOkBtn.click();
+        }
+    })
+    resizeCancelBtn.addEventListener('click', () => {
+        resizeInput.value = '';
+        resizeDialog.close();
+    })
+    resizeDialog.addEventListener('cancel', () => {
+        resizeInput.value = '';
+    })
+
     const gridBtn = document.querySelector('#grid-button');
     gridBtn.addEventListener('click', () => {
         toggleGridSketchpad();
         gridBtn.classList.toggle('unpressed');
     });
 
+    const clearDialog = document.querySelector('#confirm-clear');
     const clearBtn = document.querySelector('#clear-button');
-    clearBtn.addEventListener('click', () => clearSketchpad());
+    const clearYesBtn = document.querySelector('#clear-yes-btn');
+    clearBtn.addEventListener('click', () => clearDialog.showModal());
+    clearYesBtn.addEventListener('click', () => clearSketchpad());
 }
 
 function initializeButtonStates() {

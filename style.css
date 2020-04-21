@@ -24,6 +24,7 @@
     --button-light-color-active: var(--pop-out-color);
     --button-box-shadow: 0 0.08rem 0.15rem 0 rgb(110, 110, 110);
     --button-box-shadow-click: 0 0.03rem 0.1rem 0;
+    --button-box-shadow-small: 0 0.04rem 0.09rem 0 rgb(110, 110, 110);
 
     --eraser-display-stripe-color: hsl(0, 80%, 50%);
 
@@ -439,6 +440,74 @@ main {
     100% {
         opacity: 0;
     }
+}
+
+.pop-up-msg {
+    background-color: var(--page-color);
+    color: var(--font-hover-color);
+    text-align: center;
+    border: none;
+    padding: 1rem;
+    box-shadow: 0.2rem 0.4rem 1.5rem 0 rgb(80, 80, 80);
+}
+
+.pop-up-msg > p {
+    font-size: 0.85rem;
+    margin: 0.5rem;
+}
+
+.pop-up-msg > .warning {
+    color: hsl(0, 80%, 50%);
+}
+
+.pop-up-msg::backdrop {
+    background-color: black;
+    opacity: 0.5;
+    backdrop-filter: blur(3px);
+}
+
+.pop-up-msg .button {
+    height: 1.5rem;
+    width: 5rem;
+    font-size: 0.8rem;
+    margin: 0 1rem 0 0;
+    padding: 0 0.5rem;
+    box-shadow: var(--button-box-shadow-small);
+}
+
+.pop-up-msg .button:last-of-type {
+    margin-right: 0;
+}
+
+.pop-up-msg .button::before {
+    content: none;
+}
+
+.pop-up-btns {
+    margin-top: 0.8rem;
+}
+
+#resize-input {
+    width: 4rem;
+    background-color: var(--sketchpad-background-color);
+    color: var(--font-hover-color);
+    text-align: center;
+    font-size: 0.85rem;
+    border: none;
+    box-shadow: var(--button-box-shadow-small) inset;
+}
+
+#resize-input:focus {
+    outline: none;
+}
+
+#resize-input::-webkit-inner-spin-button {
+    opacity: 1;
+}
+
+#resize-wrong-input::backdrop {
+    opacity: 0;
+    backdrop-filter: blur();
 }
 
 @media only screen and (min-aspect-ratio: 6/5) {

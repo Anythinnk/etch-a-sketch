@@ -41,6 +41,30 @@
         <div id="usage-tips">
             <p>Tip: <span id="tip">Click on the sketchpad to enable/disable drawing</span></p>
         </div>
+        <dialog class="pop-up-msg" id="confirm-resize">
+            <p>How tall/wide should the sketchpad be?
+            <br><span id="req-emphasis">Please enter an integer between 16 and 100.</span></p>
+            <p class="warning">Warning! The current sketchpad will be cleared!</p>
+            <input type="number" id="resize-input" name="resize-input" min="16" max="100">
+            <div class="pop-up-btns">
+                <button class="button" id="resize-ok-btn">Ok</button>
+                <button class="button" id="resize-cancel-btn">Cancel</button>
+            </div>
+        </dialog>
+        <dialog class="pop-up-msg" id="confirm-clear">
+            <p>Clear Sketchpad?</p>
+            <form method="dialog" class="pop-up-btns">
+                <button class="button" id="clear-yes-btn">Yes</button>
+                <button class="button">No</button>
+            </form>
+        </dialog>
+        <dialog class="pop-up-msg" id="resize-wrong-input">
+            <p class="warning">Invalid entry!</p> 
+            <p>Please enter an integer between 16 and 100.</p>
+            <form method="dialog">
+                <button class="button" id="message-ok-btn">Ok</button>
+            </form>    
+        </dialog>
     </main>
     <script type="text/javascript" src="script.js"></script>
 </body>

@@ -510,6 +510,12 @@ main {
     backdrop-filter: blur();
 }
 
+@media only screen and (min-aspect-ratio: 3/4) {
+    :root {
+        --sketchpad-height-dim: 60vh;
+    }
+}
+
 @media only screen and (min-aspect-ratio: 6/5) {
     :root {
         --sketchpad-height-dim: 70vmin;
